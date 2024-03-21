@@ -1,0 +1,166 @@
+Update the dob of emp no 101
+
+update exemp
+set dob='2021-03-21'
+where eno=101;
+
+display the name of the emp whose gender is male and sal is more than 1000
+select ename
+from exemp
+where gender = 'm'
+and
+salary>1000
+
+display names of employee who have a valid passport
+is null
+SELECT ename
+FROM exemp
+WHERE passport IS NOT NULL
+
+display name of emp who are either wfh or wfo
+select ename
+from exemp
+where workmode like 'wfh'
+or
+workmode like 'wfo';
+
+display the employee detail in ascending order of thier salary
+SELECT *
+FROM exemp
+ORDER BY salary ASC
+
+display the employee detail in ascending order of thier salary if there are multiple peoplw with the same salary the 
+order them by thier name in asc order
+SELECT *
+FROM exemp
+ORDER BY salary ASC , ename ASC
+
+
+display the count of males & female employees
+SELECT gender, COUNT( * )
+FROM exemp
+GROUP BY gender
+
+change the name of the count(*) column in the output to 'Number Of Employees'
+SELECT gender, COUNT( * ) as 'Number Of Employees'
+FROM exemp
+GROUP BY gender
+ORDER BY gender DESC
+
+
+display average salary of each gender
+SELECT gender, AVG( salary ) AS 'Average Salary'
+FROM exemp
+GROUP BY gender
+
+display count of employee in each workmode
+select workmode,count(*) as 'Count Of Employees'
+from exemp
+group by workmode;
+
+
+display the workmode in which more than 2 employees are operating
+select workmode,count(workmode) as 'Count Of Employee' 
+from exemp
+group by workmode
+having count(workmode)>2;
+
+
+display name of the employee earning maximum salary
+SELECT ename
+FROM exemp
+WHERE salary = (
+SELECT MAX( salary )
+FROM exemp )
+
+
+
+SELECT ename
+FROM exemp
+WHERE salary > (
+SELECT AVG( salary )
+FROM exemp
+WHERE gender LIKE 'm' )
+
+
+ALL operator
+solution 1:
+display name of female emp whose salary is greater than all the males
+select ename from exemp 
+where gender like 'f' 
+and 
+salary > ALL (select salary from exemp where gender like 'm');
+
+solution 2:
+select ename from exemp 
+where gender like 'f' 
+and 
+salary >(select max(salary) from exemp where gender like 'm');
+
+
+ANY OPERATOR
+display name of female emp whose salary is greater than any the males
+SELECT ename
+FROM exemp
+WHERE gender LIKE 'f'
+AND salary > ANY(
+SELECT salary
+FROM exemp
+WHERE gender LIKE 'm'
+)
+
+IN operator
+question display names of employee whose workmode is wfo or wfh
+SELECT ename
+FROM exemp
+WHERE workmode IN('wfo','wfh');
+
+
+View
+create a view which displays only the empname,gender & age
+
+create view newyeargifts
+as
+select ename,gender,age
+from exemp;
+select * from newyeargifts
+
+
+
+1 : 1
+CREATE TABLE newcm(
+cmno INT( 5 ) AUTO_INCREMENT ,
+cmname VARCHAR( 10 ) NOT NULL ,
+age INT( 3 ) ,
+gen CHAR,
+PRIMARY KEY ( cmno ) );
+
+
+create table state(
+sno int(5) auto_increment,
+sname varchar(15),
+capcity varchar(15),
+cmno int(5),
+
+primary key(sno),
+foreign key(cmno) references cm(cmno));
+
+insert into cm(cmname,age,gen) values
+('Patel',56,'m'),
+('Shinde',55,'m');
+
+
+insert into state(sname,capcity,cmno) values
+('Gujarat','Ahmedbad',1),
+('Maharashtra','Mumbai',2);
+
+
+SELECT *
+FROM cm, state
+WHERE cm.cmno = state.cmno
+
+
+display statename along with its CM
+SELECT sname,cmname
+FROM state s, cm c
+WHERE s.cmno = c.cmno;
